@@ -14,7 +14,7 @@ var airtableElement;
 var my_airtable;
 var my_SPIKE;
 
-var do_alerts = true; // change to "false" to not show alerts
+var do_alerts = false; // change to "false" to not show alerts
 
 ///////////////////////
 // REMOTE PAGES CODE //
@@ -207,19 +207,19 @@ function airtable_check() {
 
 		// look up the current value stored in Airtable
 		airtable_val = my_airtable.getValue(vals["name_val"]);
-		
+
 		if (vals["compare_type"] == "changes") {
-			
+
 			// if new value
 			if (!(vals["prev_val"] == airtable_val)) {
 				// then it's a match!
 				set_attribute(div, "table", "class", "airtable_active");
 				do_action(vals);
 			} else { set_attribute(div, "table", "class", "airtable_inactive"); }
-			
+
 			// update prev value to match what's in airtable (because looking for change next time around)
 			set_attribute(div, "input[id=prev_val]", "value", airtable_val);
-			
+
 		} else if (vals["compare_type"] == "equal") {
 
 			// if new value and it matches the expected value
@@ -228,10 +228,10 @@ function airtable_check() {
 				set_attribute(div, "table", "class", "airtable_active");
 				do_action(vals);
 			} else { set_attribute(div, "table", "class", "airtable_inactive"); }
-			
+
 			// update prev value to match what's in airtable (because looking for change next time around)
 			set_attribute(div, "input[id=prev_val]", "value", airtable_val);
-		
+
 		} else if (vals["compare_type"] == "less-than") {
 
 			// if new value and it matches the expected value
@@ -240,7 +240,7 @@ function airtable_check() {
 				set_attribute(div, "table", "class", "airtable_active");
 				do_action(vals);
 			} else { set_attribute(div, "table", "class", "airtable_inactive"); }
-			
+
 			// update prev value to match what's in airtable (because looking for change next time around)
 			set_attribute(div, "input[id=prev_val]", "value", airtable_val);
 
@@ -252,7 +252,7 @@ function airtable_check() {
 				set_attribute(div, "table", "class", "airtable_active");
 				do_action(vals);
 			} else { set_attribute(div, "table", "class", "airtable_inactive"); }
-			
+
 			// update prev value to match what's in airtable (because looking for change next time around)
 			set_attribute(div, "input[id=prev_val]", "value", airtable_val);
 
@@ -268,7 +268,7 @@ function airtable_check() {
 function force_action(div_num) {
 	div = check_array[div_num];
 	vals = get_div_vals(div);
-	
+
 	// now force an action to execute
 	set_attribute(div, "table", "class", "airtable_active");
 	do_action(vals);
@@ -287,7 +287,7 @@ function init_prev_val() {
 		set_attribute(div, "input[id=prev_val]", "value", airtable_val);
 	}
 	// now start checking
-	setTimeout(airtable_check,2000);				
+	setTimeout(airtable_check,2000);
 }
 
 // this is a setup function for local pages
@@ -297,7 +297,7 @@ function setup_local() {
 	for (i=0; i<d.length; i++) {
 		div = d[i];
 		vals = get_div_vals(div);
-		
+
 		compare_text = "";
 		switch (vals["compare_type"]) {
 			case "changes":
@@ -313,7 +313,7 @@ function setup_local() {
 				compare_text = "greater than";
 				break
 		}
-		
+
 		html = "";
 		html += "<input type=hidden id='prev_val' value='" + vals["value_val"] + "'>"; // airtable not set up yet, so can't use real data yet
 		html += "<table class='airtable_inactive'><tr>";
@@ -333,7 +333,7 @@ function setup_local() {
 			html += "<td>then into slot <input type=text size=4 id='action_val' value='" + vals["action_val"] + "'> download/run code</td>";
 			html += "<td><textarea id='code_val' cols=40 rows=6>" + vals["code_val"] + "</textarea></td>";
 		}
-		
+
 		if (vals["reset_val"] != null) {
 			html += "<td>and after reset Value to <input type=text id='reset_val' value='" + vals["reset_val"] + "'></td>";
 		} else { html+= "<td></td>"; }
@@ -377,7 +377,7 @@ window.addEventListener('load', function () {
 	    // SPIKE service
 	    my_SPIKE = document.getElementById("service_spike").getService();
 	}
-	
+
 	if (page_type == "local") {
 		setTimeout(init_prev_val,2000);
 	}
